@@ -114,6 +114,19 @@
         .field label{font-size:.72rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;}
         .field input,.field select{border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:12px;padding:.8rem .9rem;outline:none;}
         .modal-actions{grid-column:1/-1;display:flex;justify-content:flex-end;gap:.65rem;padding-top:.2rem;}
+        /* File drop zone */
+        .file-drop-zone{grid-column:1/-1;border:2px dashed var(--border);border-radius:14px;padding:1.4rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;cursor:pointer;transition:border-color .2s,background .2s;text-align:center;}
+        .file-drop-zone:hover{border-color:var(--primary);background:rgba(61,90,241,.04);}
+        .file-drop-zone .material-icons-sharp{font-size:1.8rem;color:var(--text-dim);}
+        .file-drop-zone .fdz-text{font-size:.84rem;font-weight:600;color:var(--text-sub);}
+        .file-drop-zone .fdz-sub{font-size:.74rem;color:var(--text-dim);}
+        .file-chip{grid-column:1/-1;display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;background:rgba(61,90,241,.06);border:1px solid rgba(61,90,241,.15);border-radius:12px;}
+        .file-chip .material-icons-sharp{color:var(--primary);font-size:1.2rem;flex-shrink:0;}
+        .file-chip-info{flex:1;min-width:0;}
+        .file-chip-name{font-size:.82rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .file-chip-size{font-size:.72rem;color:var(--text-dim);margin-top:.1rem;}
+        .file-chip-clear{background:none;border:none;cursor:pointer;color:var(--text-dim);padding:.2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:color .2s,background .2s;flex-shrink:0;}
+        .file-chip-clear:hover{color:#e85d75;background:rgba(232,93,117,.1);}
 
         /* ── Role-specific page headers ── */
         .page-header{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.4rem;padding:1.4rem 1.6rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);box-shadow:var(--shadow-sm);}
@@ -246,14 +259,30 @@
                 <label for="res-lecturer">Lecturer</label>
                 <input id="res-lecturer" name="lecturer" type="text" placeholder="Dr. Gaddafi" required>
             </div>
-            <div class="field">
-                <label for="res-file">File Name</label>
-                <input id="res-file" name="fileName" type="text" placeholder="week-8-slides.pdf" required>
+            <!-- Unified file picker — name + size auto-filled on select -->
+            <div class="field full" style="grid-column:1/-1">
+                <label>File</label>
+                <div class="file-drop-zone" id="file-drop-zone" onclick="document.getElementById('res-upload').click()">
+                    <span class="material-icons-sharp">cloud_upload</span>
+                    <div class="fdz-text">Click to choose a file</div>
+                    <div class="fdz-sub">PDF, DOCX, PPTX, images and more</div>
+                    <input id="res-upload" name="upload" type="file" style="display:none" onchange="handleFileSelect(this)">
+                </div>
+                <div class="file-chip" id="file-chip" style="display:none">
+                    <span class="material-icons-sharp">insert_drive_file</span>
+                    <div class="file-chip-info">
+                        <div class="file-chip-name" id="file-chip-name"></div>
+                        <div class="file-chip-size" id="file-chip-size"></div>
+                    </div>
+                    <button type="button" class="file-chip-clear" onclick="clearFile()" title="Remove file">
+                        <span class="material-icons-sharp" style="font-size:1rem">close</span>
+                    </button>
+                </div>
+                <!-- Hidden inputs — auto-filled by handleFileSelect -->
+                <input type="hidden" id="res-file" name="fileName">
+                <input type="hidden" id="res-size" name="size">
             </div>
-            <div class="field">
-                <label for="res-upload">Upload File</label>
-                <input id="res-upload" name="upload" type="file">
-            </div>
+
             <div class="field full">
                 <label for="res-desc">Short Note</label>
                 <input id="res-desc" name="description" type="text" placeholder="Covers routing protocols, recap questions and examples." required>
@@ -261,10 +290,6 @@
             <div class="field">
                 <label for="res-due">Due Date</label>
                 <input id="res-due" name="dueDate" type="date">
-            </div>
-            <div class="field">
-                <label for="res-size">File Size</label>
-                <input id="res-size" name="size" type="text" placeholder="2.4 MB" required>
             </div>
             <div class="modal-actions">
                 <button type="button" class="btn-secondary" onclick="closeShareModal()">Cancel</button>

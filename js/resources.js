@@ -68,6 +68,33 @@ function renderResources() {
     `).join('');
 }
 
+/* ── File picker helpers ── */
+function handleFileSelect(input) {
+    const file = input.files[0];
+    if (!file) { clearFile(); return; }
+
+    const bytes = file.size;
+    const sizeStr = bytes < 1024 * 1024
+        ? `${(bytes / 1024).toFixed(0)} KB`
+        : `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+
+    document.getElementById('res-file').value = file.name;
+    document.getElementById('res-size').value = sizeStr;
+
+    document.getElementById('file-chip-name').textContent = file.name;
+    document.getElementById('file-chip-size').textContent = sizeStr;
+    document.getElementById('file-chip').style.display = 'flex';
+    document.getElementById('file-drop-zone').style.display = 'none';
+}
+
+function clearFile() {
+    document.getElementById('res-upload').value = '';
+    document.getElementById('res-file').value = '';
+    document.getElementById('res-size').value = '';
+    document.getElementById('file-chip').style.display = 'none';
+    document.getElementById('file-drop-zone').style.display = 'flex';
+}
+
 function openShareModal() {
     if (currentUser && currentUser.role !== 'lecturer') {
         UMS.toast('Only lecturers can upload resources.', 'warning');
@@ -79,6 +106,7 @@ function openShareModal() {
 function closeShareModal() {
     document.getElementById('share-modal').classList.remove('open');
     document.getElementById('share-form').reset();
+    clearFile();
     const lecturerField = document.getElementById('res-lecturer');
     if (lecturerField && currentUser) lecturerField.value = currentUser.name;
 }
@@ -133,8 +161,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         event.preventDefault();
         const formData = new FormData(event.target);
         const file = document.getElementById('res-upload').files[0];
+
+        /* Require a file to be selected */
+        if (!file) {
+            UMS.toast('Please choose a file to upload.', 'warning');
+            return;
+        }
+
         const submitBtn = event.target.querySelector('[type="submit"]');
-        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Saving…'; }
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Uploading…'; }
 
         try {
             const payload = {
@@ -143,9 +178,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 course: formData.get('course'),
                 description: formData.get('description'),
                 dueDate: formData.get('dueDate'),
-                fileName: file ? file.name : formData.get('fileName'),
+                fileName: file.name,
                 fileData: await fileToDataUrl(file),
-                size: file ? `${(file.size / 1024 / 1024).toFixed(1)} MB` : formData.get('size')
+                size: formData.get('size') /* set by handleFileSelect */
             };
             const saved = await UMS.api('/api/resources', { method: 'POST', body: payload });
             resources.unshift(saved.resource);
