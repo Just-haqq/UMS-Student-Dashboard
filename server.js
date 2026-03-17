@@ -263,7 +263,12 @@ async function handleApi(req, res, url) {
     if (req.method === 'GET' && url.pathname === '/api/timetable') {
         const sessionUser = requireAuth(req, res);
         if (!sessionUser) return;
-        sendJson(res, 200, { timetable: sessionUser.db.timetable });
+        if (sessionUser.user.role === 'lecturer') {
+            const dashboard = buildLecturerDashboard(sessionUser.db, sessionUser.user);
+            sendJson(res, 200, { timetable: dashboard.teachingSchedule, mode: 'lecturer' });
+            return;
+        }
+        sendJson(res, 200, { timetable: sessionUser.db.timetable, mode: 'student' });
         return;
     }
 

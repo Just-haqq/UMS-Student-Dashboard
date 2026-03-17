@@ -1,5 +1,6 @@
 let filt = 'all';
 let lecturers = [];
+let currentUser = null;
 
 function setF(btn) {
     document.querySelectorAll('.ft').forEach((b) => b.classList.remove('active'));
@@ -66,10 +67,14 @@ function render() {
             </div>
             <div class="lc-footer">
                 <div class="chips">${item.courses.map((course) => `<span class="chip">${course}</span>`).join('')}</div>
-                <button class="consult-btn" ${unavail(item) ? 'disabled' : ''} onclick="book('${item.id}')">
-                    <span class="material-icons-sharp" style="font-size:.95rem">${unavail(item) ? 'block' : 'calendar_month'}</span>
-                    ${unavail(item) ? 'Unavailable' : 'Book Consultation'}
-                </button>
+                ${currentUser && currentUser.role === 'lecturer' ? `
+                    <div class="info-val" style="font-size:.78rem;color:var(--text-dim)">Colleague directory only. Consultation booking is available to students.</div>
+                ` : `
+                    <button class="consult-btn" ${unavail(item) ? 'disabled' : ''} onclick="book('${item.id}')">
+                        <span class="material-icons-sharp" style="font-size:.95rem">${unavail(item) ? 'block' : 'calendar_month'}</span>
+                        ${unavail(item) ? 'Unavailable' : 'Book Consultation'}
+                    </button>
+                `}
             </div>
         </div>
     `).join('');
@@ -78,11 +83,14 @@ function render() {
 document.addEventListener('DOMContentLoaded', async () => {
     UMS.bindTheme();
     const user = await UMS.requireAuth();
+    currentUser = user;
     const data = await UMS.api('/api/lecturers');
     lecturers = data.lecturers;
     if (user.role === 'lecturer') {
+        const title = document.querySelector('.stitle');
         const sub = document.querySelector('.subtitle');
-        if (sub) sub.textContent = 'Browse lecturer profiles and current availability across departments.';
+        if (title) title.textContent = 'Staff Directory';
+        if (sub) sub.textContent = 'Browse colleague profiles, office hours and teaching areas across departments.';
     }
     render();
 });

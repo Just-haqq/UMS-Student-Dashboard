@@ -94,16 +94,37 @@ tbody tr{transition:background .15s,opacity .2s;}
         }, duration);
     }
 
-    /* ── Mobile bottom navigation ── */
-    function buildMobileNav() {
-        if (document.querySelector('.ums-mobile-nav')) return;
-        const pages = [
+    function getNavPages(role) {
+        if (role === 'lecturer') {
+            return [
+                { href: 'index.html', icon: 'home', label: 'Home' },
+                { href: 'timetable.html', icon: 'calendar_today', label: 'Schedule' },
+                { href: 'resources.html', icon: 'folder_open', label: 'Resources' }
+            ];
+        }
+        return [
             { href: 'index.html', icon: 'home', label: 'Home' },
             { href: 'timetable.html', icon: 'calendar_today', label: 'Timetable' },
             { href: 'exam.html', icon: 'grid_view', label: 'Exams' },
             { href: 'resources.html', icon: 'folder_open', label: 'Resources' },
             { href: 'lecturers.html', icon: 'person_outline', label: 'Lecturers' }
         ];
+    }
+
+    function syncDesktopNav(role) {
+        const nav = document.querySelector('.nav-center');
+        if (!nav) return;
+        const allowed = getNavPages(role).map(function (page) { return page.href; });
+        nav.querySelectorAll('a.nav-item').forEach(function (item) {
+            const href = item.getAttribute('href');
+            item.style.display = allowed.includes(href) ? '' : 'none';
+        });
+    }
+
+    /* ── Mobile bottom navigation ── */
+    function buildMobileNav(role) {
+        if (document.querySelector('.ums-mobile-nav')) return;
+        const pages = getNavPages(role);
         const current = window.location.pathname.split('/').pop() || 'index.html';
         const nav = document.createElement('nav');
         nav.className = 'ums-mobile-nav';
@@ -114,6 +135,13 @@ tbody tr{transition:background .15s,opacity .2s;}
                 + '</a>';
         }).join('') + '</div>';
         document.body.appendChild(nav);
+    }
+
+    function refreshNav(role) {
+        syncDesktopNav(role);
+        const existingMobileNav = document.querySelector('.ums-mobile-nav');
+        if (existingMobileNav) existingMobileNav.remove();
+        buildMobileNav(role);
     }
 
     /* ── Token helpers ── */
@@ -179,6 +207,7 @@ tbody tr{transition:background .15s,opacity .2s;}
     /* ── User hydration ── */
     function hydrateUser(user) {
         if (!user) return;
+        refreshNav(user.role);
         document.querySelectorAll('.u-name').forEach(function (el) { el.textContent = user.name; });
         document.querySelectorAll('.u-role').forEach(function (el) { el.textContent = user.role === 'lecturer' ? 'Lecturer' : 'Student'; });
         document.querySelectorAll('.u-avatar').forEach(function (el) {

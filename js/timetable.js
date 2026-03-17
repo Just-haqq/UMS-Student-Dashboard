@@ -1,10 +1,16 @@
 document.addEventListener('DOMContentLoaded', async () => {
     UMS.bindTheme();
-    await UMS.requireAuth();
+    const user = await UMS.requireAuth();
+    const isLecturer = user.role === 'lecturer';
     const { timetable } = await UMS.api('/api/timetable');
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const today = new Date().getDay();
     let cur = today;
+    const titleEl = document.querySelector('.stitle');
+    const tableHeaders = document.querySelectorAll('thead th');
+
+    if (titleEl) titleEl.textContent = isLecturer ? 'Teaching Schedule' : 'Timetable';
+    if (tableHeaders[2]) tableHeaders[2].textContent = isLecturer ? 'Course' : 'Subject';
 
     function getMinutes(timeStr) {
         if (!timeStr || timeStr === '-') return -1;
@@ -31,11 +37,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     function renderTT() {
         const rows = timetable[cur];
         const isHoliday = rows[0].r === '-';
-        document.getElementById('card-title').textContent = cur === today ? "Today's Classes" : `${days[cur]}'s Classes`;
-        document.getElementById('class-count').textContent = isHoliday ? 'Holiday' : `${rows.length} class${rows.length !== 1 ? 'es' : ''}`;
+        const sessionLabel = isLecturer ? 'session' : 'class';
+        const todayTitle = isLecturer ? "Today's Teaching Schedule" : "Today's Classes";
+        const nextTitle = isLecturer ? `${days[cur]}'s Teaching Schedule` : `${days[cur]}'s Classes`;
+        document.getElementById('card-title').textContent = cur === today ? todayTitle : nextTitle;
+        document.getElementById('class-count').textContent = isHoliday ? 'Free day' : `${rows.length} ${sessionLabel}${rows.length !== 1 ? 's' : ''}`;
 
         if (isHoliday) {
-            document.getElementById('tt-body').innerHTML = `<tr><td colspan="4"><div class="holiday-row"><span class="material-icons-sharp">beach_access</span>${rows[0].s}</div></td></tr>`;
+            const emptyLabel = isLecturer ? 'No teaching scheduled' : rows[0].s;
+            document.getElementById('tt-body').innerHTML = `<tr><td colspan="4"><div class="holiday-row"><span class="material-icons-sharp">beach_access</span>${emptyLabel}</div></td></tr>`;
             return;
         }
 
