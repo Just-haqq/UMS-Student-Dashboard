@@ -1,0 +1,83 @@
+document.addEventListener('DOMContentLoaded', async () => {
+    UMS.bindTheme();
+    await UMS.requireAuth();
+    const { timetable } = await UMS.api('/api/timetable');
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const today = new Date().getDay();
+    let cur = today;
+
+    function getMinutes(timeStr) {
+        if (!timeStr || timeStr === '-') return -1;
+        const m = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+        if (!m) return -1;
+        let h = parseInt(m[1]);
+        if (m[3].toUpperCase() === 'PM' && h !== 12) h += 12;
+        if (m[3].toUpperCase() === 'AM' && h === 12) h = 0;
+        return h * 60 + parseInt(m[2]);
+    }
+
+    function renderStrip() {
+        document.getElementById('week-strip').innerHTML = days.map((day, index) => `
+            <button class="wt${index === cur ? ' active' : ''}${index === today ? ' today-mark' : ''}" onclick="setCur(${index})">${day}</button>
+        `).join('');
+    }
+
+    window.setCur = function setCur(index) {
+        cur = index;
+        renderStrip();
+        renderTT();
+    };
+
+    function renderTT() {
+        const rows = timetable[cur];
+        const isHoliday = rows[0].r === '-';
+        document.getElementById('card-title').textContent = cur === today ? "Today's Classes" : `${days[cur]}'s Classes`;
+        document.getElementById('class-count').textContent = isHoliday ? 'Holiday' : `${rows.length} class${rows.length !== 1 ? 'es' : ''}`;
+
+        if (isHoliday) {
+            document.getElementById('tt-body').innerHTML = `<tr><td colspan="4"><div class="holiday-row"><span class="material-icons-sharp">beach_access</span>${rows[0].s}</div></td></tr>`;
+            return;
+        }
+
+        const now = new Date();
+        const currentMins = now.getHours() * 60 + now.getMinutes();
+        let nextClassIdx = -1;
+
+        document.getElementById('tt-body').innerHTML = rows.map((row, idx) => {
+            const rowMins = getMinutes(row.t);
+            const nextRowMins = idx + 1 < rows.length ? getMinutes(rows[idx + 1].t) : rowMins + 60;
+            let trClass = '';
+            let trStyle = '';
+            let indicator = '';
+
+            if (cur === today && rowMins >= 0) {
+                if (currentMins >= rowMins && currentMins < nextRowMins) {
+                    /* Currently in this class */
+                    trClass = ' class="current-class-row"';
+                    indicator = '<span style="display:inline-flex;align-items:center;gap:.25rem;font-size:.66rem;font-weight:700;color:#22c88a;margin-left:.5rem;"><span class="material-icons-sharp" style="font-size:.8rem">fiber_manual_record</span>Now</span>';
+                } else if (rowMins > currentMins && nextClassIdx === -1) {
+                    /* Next upcoming class */
+                    nextClassIdx = idx;
+                    trClass = ' class="next-class-row"';
+                    const minsUntil = rowMins - currentMins;
+                    const hoursUntil = Math.floor(minsUntil / 60);
+                    const minsRem = minsUntil % 60;
+                    const untilLabel = hoursUntil > 0 ? `in ${hoursUntil}h ${minsRem}m` : `in ${minsRem}m`;
+                    indicator = `<span style="display:inline-flex;align-items:center;gap:.25rem;font-size:.66rem;font-weight:700;color:#3d5af1;margin-left:.5rem;"><span class="material-icons-sharp" style="font-size:.8rem">schedule</span>Next · ${untilLabel}</span>`;
+                } else if (rowMins < currentMins) {
+                    trStyle = ' style="opacity:.5"';
+                }
+            }
+
+            return `<tr${trClass}${trStyle}>
+                <td>${row.t}</td>
+                <td>${row.r}</td>
+                <td><strong>${row.s}</strong>${indicator}</td>
+                <td>${row.l ? `<span class="pill pill-${row.l.toLowerCase()}">${row.l}</span>` : ''}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    renderStrip();
+    renderTT();
+});

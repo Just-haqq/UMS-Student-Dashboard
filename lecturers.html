@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UMS — Lecturers</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <style>
+        :root{--bg:#f4f4f8;--surface:#ffffff;--surface2:#f0f0f5;--surface3:#e4e4ee;--text:#0e0e1c;--text-sub:#5a5a78;--text-dim:#9a9ab8;--border:rgba(0,0,0,0.07);--primary:#3d5af1;--accent:#e85d75;--success:#22c88a;--warning:#f5a623;--shadow-sm:0 1px 6px rgba(0,0,0,0.07);--shadow-md:0 4px 20px rgba(0,0,0,0.10);--shadow-lg:0 10px 40px rgba(0,0,0,0.14);--nav-h:70px;--r-card:16px;}
+        .dark{--bg:#0c0d18;--surface:#13141f;--surface2:#1a1b2a;--surface3:#22233a;--text:#e8e8f4;--text-sub:#8080a8;--text-dim:#50507a;--border:rgba(255,255,255,0.07);--shadow-sm:0 1px 6px rgba(0,0,0,0.5);--shadow-md:0 4px 20px rgba(0,0,0,0.55);}
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html{font-size:14px;}
+        body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s;}
+        a{text-decoration:none;color:inherit;}
+        .topnav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 2.5rem;z-index:900;box-shadow:var(--shadow-sm);}
+        .nav-brand{font-family:'DM Serif Display',serif;font-size:1.55rem;color:var(--text);margin-right:auto;letter-spacing:-.01em;}
+        .nav-center{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:.2rem;}
+        .nav-item{display:flex;flex-direction:column;align-items:center;gap:.15rem;padding:.4rem 1.3rem;border-radius:10px;color:var(--text-dim);font-size:.71rem;font-weight:500;transition:all .2s;cursor:pointer;position:relative;}
+        .nav-item span.material-icons-sharp{font-size:1.25rem;}
+        .nav-item:hover{color:var(--primary);background:rgba(61,90,241,.06);}
+        .nav-item.active{color:var(--primary);}.nav-item.active span.material-icons-sharp{color:var(--primary);}
+        .active-bar{position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:24px;height:2.5px;border-radius:2px;background:var(--primary);opacity:0;}
+        .nav-item.active .active-bar{opacity:1;}
+        .nav-right{display:flex;align-items:center;gap:.8rem;margin-left:auto;}
+        .vbar{width:1px;height:30px;background:var(--border);}
+        .user-pill{display:flex;align-items:center;gap:.6rem;cursor:pointer;}
+        .u-avatar{width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.95rem;font-family:'DM Serif Display',serif;}
+        .u-name{font-size:.86rem;font-weight:600;color:var(--text);}.u-role{font-size:.7rem;color:var(--text-dim);}
+        .icon-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:50%;cursor:pointer;color:var(--text-sub);transition:background .2s;}
+        .icon-btn:hover{background:var(--surface2);}
+        .fab{position:fixed;bottom:1.5rem;right:1.5rem;width:40px;height:40px;border-radius:50%;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-md);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-sub);transition:all .2s;z-index:800;}
+        .fab:hover{background:var(--primary);color:#fff;border-color:var(--primary);}
+        .wrap{margin-top:var(--nav-h);padding:2rem 2.5rem;}
+        .stitle{font-family:'DM Serif Display',serif;font-size:1.65rem;font-weight:400;color:var(--text);letter-spacing:-.02em;}
+        .subtitle{color:var(--text-dim);font-size:.82rem;margin-bottom:1.5rem;margin-top:.2rem;}
+        @keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+        /* toolbar */
+        .toolbar{display:flex;align-items:center;gap:.8rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+        .search-box{display:flex;align-items:center;gap:.5rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.5rem 1rem;flex:1;max-width:300px;transition:all .2s;}
+        .search-box:focus-within{border-color:var(--primary);box-shadow:0 0 0 3px rgba(61,90,241,.1);}
+        .search-box input{border:none;outline:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:.84rem;color:var(--text);width:100%;}
+        .search-box input::placeholder{color:var(--text-dim);}
+        .search-box span{color:var(--text-dim);font-size:1rem;}
+        .ftabs{display:flex;gap:.3rem;background:var(--surface2);border-radius:10px;padding:.2rem;border:1px solid var(--border);}
+        .ft{padding:.38rem .9rem;border-radius:7px;font-size:.76rem;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text-dim);transition:all .2s;font-family:'DM Sans',sans-serif;}
+        .ft:hover{color:var(--primary);}
+        .ft.active{background:var(--surface);color:var(--primary);box-shadow:var(--shadow-sm);}
+
+        /* grid */
+        .lec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1rem;}
+        .lec-card{background:var(--surface);border-radius:var(--r-card);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;transition:transform .25s,box-shadow .25s;animation:up .4s ease both;}
+        .lec-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+        .lec-card:nth-child(1){animation-delay:.04s}.lec-card:nth-child(2){animation-delay:.08s}
+        .lec-card:nth-child(3){animation-delay:.12s}.lec-card:nth-child(4){animation-delay:.16s}
+        .lec-card:nth-child(5){animation-delay:.20s}.lec-card:nth-child(6){animation-delay:.24s}
+        .lec-card:nth-child(7){animation-delay:.28s}.lec-card:nth-child(8){animation-delay:.32s}
+
+        .lc-top{padding:1.2rem 1.2rem .9rem;display:flex;align-items:flex-start;gap:.9rem;}
+        .lc-av{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:1.1rem;color:#fff;flex-shrink:0;}
+        .lc-meta{flex:1;min-width:0;}
+        .lc-name{font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:.12rem;}
+        .lc-dept{font-size:.72rem;color:var(--text-dim);margin-bottom:.45rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .status-pill{display:inline-flex;align-items:center;gap:.3rem;font-size:.7rem;font-weight:600;padding:.2rem .6rem;border-radius:20px;}
+        .status-pill::before{content:'';width:6px;height:6px;border-radius:50%;}
+        .sp-avail{background:rgba(34,200,138,.1);color:#16a870;}.sp-avail::before{background:#22c88a;}
+        .sp-online{background:rgba(61,90,241,.1);color:var(--primary);}.sp-online::before{background:var(--primary);}
+        .sp-busy{background:rgba(232,93,117,.1);color:var(--accent);}.sp-busy::before{background:var(--accent);}
+        .sp-away{background:rgba(245,166,35,.1);color:#b07800;}.sp-away::before{background:var(--warning);}
+        .dark .sp-away{color:var(--warning);}
+
+        .lc-divider{height:1px;background:var(--border);margin:0 1.2rem;}
+        .lc-body{padding:.85rem 1.2rem;display:flex;flex-direction:column;gap:.55rem;}
+        .info-row{display:flex;align-items:flex-start;gap:.55rem;}
+        .info-row span.material-icons-sharp{font-size:.95rem;color:var(--text-dim);flex-shrink:0;margin-top:.1rem;}
+        .info-lbl{font-size:.67rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;font-weight:600;}
+        .info-val{font-size:.8rem;color:var(--text);font-weight:500;margin-top:.08rem;}
+
+        .lc-footer{padding:.85rem 1.2rem;border-top:1px solid var(--border);}
+        .chips{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.7rem;}
+        .chip{background:rgba(61,90,241,.08);color:var(--primary);border:1px solid rgba(61,90,241,.15);font-size:.68rem;font-weight:700;padding:.2rem .6rem;border-radius:20px;}
+        .consult-btn{width:100%;padding:.6rem;background:var(--primary);color:#fff;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.4rem;}
+        .consult-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(61,90,241,.4);}
+        .consult-btn:disabled{background:var(--surface2);color:var(--text-dim);cursor:not-allowed;transform:none;box-shadow:none;}
+        @keyframes spin{to{transform:rotate(360deg)}}
+
+        .no-results{grid-column:1/-1;text-align:center;padding:4rem;color:var(--text-dim);}
+        .no-results span{font-size:2.5rem;display:block;margin-bottom:.8rem;opacity:.3;}
+
+        @media(max-width:620px){.nav-center{display:none;}.wrap{padding:1.2rem 1rem;}.lec-grid{grid-template-columns:1fr;}}
+
+        /* ── DROPDOWN MENU ── */
+        .menu-wrap{position:relative;}
+        .dropdown{position:absolute;top:calc(100% + 12px);right:0;width:240px;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,0.16);z-index:1000;overflow:hidden;opacity:0;transform:translateY(-8px) scale(.97);pointer-events:none;transition:opacity .18s ease,transform .18s ease;}
+        .dropdown.open{opacity:1;transform:translateY(0) scale(1);pointer-events:all;}
+        .dd-profile{padding:1.1rem 1.3rem 1rem;}
+        .dd-row{margin-bottom:.55rem;}
+        .dd-label{font-size:.68rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;}
+        .dd-value{font-size:.84rem;font-weight:500;color:var(--text);margin-top:.1rem;line-height:1.4;}
+        .dd-divider{height:1px;background:var(--border);}
+        .dd-actions{padding:.5rem .5rem;}
+        .dd-action{display:flex;align-items:center;gap:.7rem;padding:.65rem .8rem;border-radius:9px;font-size:.84rem;font-weight:500;color:var(--text-sub);cursor:pointer;transition:background .15s,color .15s;}
+        .dd-action:hover{background:var(--surface2);color:var(--text);}
+        .dd-action.logout{color:#e85d75;}
+        .dd-action.logout:hover{background:rgba(232,93,117,.08);color:#e85d75;}
+        .dd-action span.material-icons-sharp{font-size:1.05rem;color:inherit;}
+    </style>
+</head>
+<body>
+<nav class="topnav">
+    <div class="nav-brand">UMS</div>
+    <div class="nav-center">
+        <a href="index.html" class="nav-item"><span class="material-icons-sharp">home</span><span>Home</span><div class="active-bar"></div></a>
+        <a href="timetable.html" class="nav-item"><span class="material-icons-sharp">calendar_today</span><span>Time Table</span><div class="active-bar"></div></a>
+        <a href="exam.html" class="nav-item"><span class="material-icons-sharp">grid_view</span><span>Examination</span><div class="active-bar"></div></a>
+        <a href="resources.html" class="nav-item"><span class="material-icons-sharp">folder_open</span><span>Resources</span><div class="active-bar"></div></a>
+        <a href="lecturers.html" class="nav-item active"><span class="material-icons-sharp">person_outline</span><span>Lecturers</span><div class="active-bar"></div></a>
+    </div>
+    <div class="nav-right">
+        <div class="vbar"></div>
+        <div class="user-pill"><div class="u-avatar">H</div><div><div class="u-name">Haqq</div><div class="u-role">Student</div></div></div>
+        <div class="menu-wrap">
+            <div class="icon-btn" id="menu-btn" onclick="toggleMenu()">
+                <span class="material-icons-sharp" style="font-size:1.1rem">more_vert</span>
+            </div>
+            <div class="dropdown" id="dropdown">
+                <div class="dd-profile">
+                    <div class="dd-row"><div class="dd-label">Course</div><div class="dd-value">BSC Computer Science<br>2nd Year</div></div>
+                    <div class="dd-row"><div class="dd-label">Student ID</div><div class="dd-value">0005678</div></div>
+                    <div class="dd-row"><div class="dd-label">Email</div><div class="dd-value">example@email.com</div></div>
+                    <div class="dd-row" style="margin-bottom:0"><div class="dd-label">Address</div><div class="dd-value">TEMA</div></div>
+                </div>
+                <div class="dd-divider"></div>
+                <div class="dd-actions">
+                    <a href="password.html" class="dd-action"><span class="material-icons-sharp">password</span>Change Password</a>
+                    <div class="dd-action logout" onclick="logout()"><span class="material-icons-sharp">logout</span>Log Out</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="wrap">
+    <div class="stitle">Lecturers</div>
+    <div class="subtitle">View office hours, locations and availability for consultations.</div>
+
+    <div class="toolbar">
+        <div class="search-box">
+            <span class="material-icons-sharp">search</span>
+            <input type="text" id="search-inp" placeholder="Search by name or course…" oninput="render()">
+        </div>
+        <div class="ftabs" id="ftabs">
+            <button class="ft active" data-f="all" onclick="setF(this)">All</button>
+            <button class="ft" data-f="available" onclick="setF(this)">Available</button>
+            <button class="ft" data-f="online" onclick="setF(this)">Online</button>
+            <button class="ft" data-f="away" onclick="setF(this)">Away / Busy</button>
+        </div>
+    </div>
+
+    <div class="lec-grid" id="lec-grid"></div>
+</div>
+
+<div class="fab" id="fab"><span class="material-icons-sharp" id="fab-icon">dark_mode</span></div>
+
+<script type="text/plain" data-disabled="legacy-lecturers">
+const data=[
+    {name:'Dr. Gaddafi',dept:'Computer Networks',av:'JW',bg:'#3d5af1',status:'available',slabel:'Available',sclass:'sp-avail',courses:['CS849','NS200'],hours:'Mon, Wed · 10:00 AM – 12:00 PM',location:'COS Block, FF5',mode:'Physical',micon:'meeting_room'},
+    {name:'Dr. Peasah',dept:'Database Systems',av:'SC',bg:'#e85d75',status:'available',slabel:'Available',sclass:'sp-avail',courses:['DBMS130'],hours:'Tue, Thu · 09:00 AM – 11:00 AM',location:', Room 204',mode:'Physical',micon:'meeting_room'},
+    {name:'Dr. Michael Brown',dept:'Mathematics',av:'MB',bg:'#22c88a',status:'online',slabel:'Online',sclass:'sp-online',courses:['MTH166'],hours:'Mon, Fri · 02:00 PM – 04:00 PM',location:'Microsoft Teams',mode:'Virtual',micon:'videocam'},
+    {name:'Mr. Kofi Darko',dept:'Network Engineering',av:'KD',bg:'#f5a623',status:'available',slabel:'Available',sclass:'sp-avail',courses:['NS200'],hours:'Wed · 01:00 PM – 03:00 PM',location:'Block 33, Room 101',mode:'Physical',micon:'meeting_room'},
+    {name:'Dr. Abena Frimpong',dept:'Mechanical Engineering',av:'AF',bg:'#7c3aed',status:'busy',slabel:'In Meeting',sclass:'sp-busy',courses:['MEC103'],hours:'Tue, Sat · 11:00 AM – 01:00 PM',location:'Block 34, Room 301',mode:'Physical',micon:'meeting_room'},
+    {name:'Prof. James Otieno',dept:'Computer Science',av:'JO',bg:'#0ea5e9',status:'online',slabel:'Online',sclass:'sp-online',courses:['CS849','CS200'],hours:'Thu · 10:00 AM – 12:00 PM',location:'Google Meet',mode:'Virtual',micon:'videocam'},
+    {name:'Dr. Efua Asare',dept:'Mathematics',av:'EA',bg:'#10b981',status:'available',slabel:'Available',sclass:'sp-avail',courses:['MTH166'],hours:'Mon, Wed, Fri · 08:00 – 10:00 AM',location:'Block 27, Room 110',mode:'Physical',micon:'meeting_room'},
+    {name:'Mr. Bright Asiedu',dept:'Network Engineering',av:'BA',bg:'#f59e0b',status:'away',slabel:'On Leave',sclass:'sp-away',courses:['NS200'],hours:'Unavailable this week',location:'Block 33, Room 205',mode:'Unavailable',micon:'event_busy'},
+];
+
+let filt='all';
+function setF(btn){document.querySelectorAll('.ft').forEach(b=>b.classList.remove('active'));btn.classList.add('active');filt=btn.dataset.f;render();}
+
+function render(){
+    const q=document.getElementById('search-inp').value.toLowerCase();
+    const filtered=data.filter(d=>{
+        const mf=filt==='all'||d.status===filt||(filt==='away'&&(d.status==='away'||d.status==='busy'));
+        const ms=!q||d.name.toLowerCase().includes(q)||d.courses.some(c=>c.toLowerCase().includes(q))||d.dept.toLowerCase().includes(q);
+        return mf&&ms;
+    });
+    const grid=document.getElementById('lec-grid');
+    if(!filtered.length){grid.innerHTML=`<div class="no-results"><span class="material-icons-sharp">search_off</span>No lecturers found.</div>`;return;}
+    const unavail=d=>d.status==='away'||d.status==='busy';
+    grid.innerHTML=filtered.map(d=>`
+        <div class="lec-card">
+            <div class="lc-top">
+                <div class="lc-av" style="background:${d.bg}">${d.av}</div>
+                <div class="lc-meta">
+                    <div class="lc-name">${d.name}</div>
+                    <div class="lc-dept">${d.dept}</div>
+                    <span class="status-pill ${d.sclass}">${d.slabel}</span>
+                </div>
+            </div>
+            <div class="lc-divider"></div>
+            <div class="lc-body">
+                <div class="info-row"><span class="material-icons-sharp">schedule</span><div><div class="info-lbl">Office Hours</div><div class="info-val">${d.hours}</div></div></div>
+                <div class="info-row"><span class="material-icons-sharp">location_on</span><div><div class="info-lbl">Location</div><div class="info-val">${d.location}</div></div></div>
+                <div class="info-row"><span class="material-icons-sharp">${d.micon}</span><div><div class="info-lbl">Mode</div><div class="info-val">${d.mode}</div></div></div>
+            </div>
+            <div class="lc-footer">
+                <div class="chips">${d.courses.map(c=>`<span class="chip">${c}</span>`).join('')}</div>
+                <button class="consult-btn" ${unavail(d)?'disabled':''} onclick="book('${d.name}')">
+                    <span class="material-icons-sharp" style="font-size:.95rem">${unavail(d)?'block':'calendar_month'}</span>
+                    ${unavail(d)?'Unavailable':'Book Consultation'}
+                </button>
+            </div>
+        </div>`).join('');
+}
+function book(n){alert(`Consultation request sent to ${n}.\nThey will confirm via your student email.`);}
+render();
+
+let dark=localStorage.getItem('ums-dark')==='true';
+const apply=()=>{document.body.classList.toggle('dark',dark);document.getElementById('fab-icon').textContent=dark?'light_mode':'dark_mode';};
+apply();document.getElementById('fab').onclick=()=>{dark=!dark;localStorage.setItem('ums-dark',dark);apply();};
+
+// ── AUTH ──
+function logout(){
+    sessionStorage.removeItem('ums-logged-in');
+    window.location.href='login.html';
+}
+//login enforcement
+if(!sessionStorage.getItem('ums-logged-in')) window.location.href='login.html';
+</script>
+<script src="js/app.js"></script>
+<script src="js/lecturers.js"></script>
+</body>
+</html>
