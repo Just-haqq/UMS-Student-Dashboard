@@ -23,9 +23,9 @@
   ],
   "sessions": [
     {
-      "token": "9f05f88e3c2436810ad10cea22d72b8d80cad119f73c3bbd",
-      "userId": "0005678",
-      "createdAt": "2026-03-17T14:30:17.540Z"
+      "token": "268d3c68ca38c37f14e7940aea7834373dd023d4f8826d16",
+      "userId": "LEC001",
+      "createdAt": "2026-03-17T15:05:58.140Z"
     }
   ],
   "attendance": [
@@ -532,6 +532,20 @@
       "lecturerId": "LEC003",
       "lecturerName": "Dr. Michael Brown",
       "createdAt": "2026-03-10T15:24:04.382Z"
+    },
+    {
+      "id": "53d32fd9-6d52-43aa-b146-7ebadc83efb4",
+      "studentId": "0005678",
+      "lecturerId": "LEC002",
+      "lecturerName": "Dr. Peasah",
+      "createdAt": "2026-03-17T14:43:37.038Z"
+    },
+    {
+      "id": "0e977e71-c208-4267-a3ad-ca9d4252c7da",
+      "studentId": "0005678",
+      "lecturerId": "LEC001",
+      "lecturerName": "Dr. Gaddafi",
+      "createdAt": "2026-03-17T15:05:32.967Z"
     }
   ]
 }
