@@ -21,7 +21,13 @@
       "password": "scrypt$4fa2e34c26c20ccf5f9d84ddce7dc520$268cf635ad0c869013efc55569e4e0e389aceaca1155fb92ead8d9e017d6a2ee00ba9a58c4b1dce225b09dac26b620a5f1cfae20fce2b8236678a3a462f558cc"
     }
   ],
-  "sessions": [],
+  "sessions": [
+    {
+      "token": "dedc0f1c0309183d12fed3db608937f124d1e6addae73d27",
+      "userId": "LEC001",
+      "createdAt": "2026-03-17T14:27:52.544Z"
+    }
+  ],
   "attendance": [
     {
       "icon": "architecture",
@@ -60,6 +66,11 @@
     }
   ],
   "announcements": [
+    {
+      "title": "CS849: new slides uploaded",
+      "time": "Just now",
+      "color": "#3d5af1"
+    },
     {
       "title": "CS849: new slides uploaded",
       "time": "Just now",
@@ -422,6 +433,20 @@
     }
   ],
   "resources": [
+    {
+      "id": "740b279b-8b77-47a4-b98c-34ddf4ea8b74",
+      "title": "Human Computer Interaction",
+      "type": "Slides",
+      "course": "CS849",
+      "lecturer": "Dr. Gaddafi",
+      "description": "Evaluation techniques",
+      "fileName": "lecture 5 Evaluation Techniques-1.pptx",
+      "size": "3.3 MB",
+      "uploaded": "17 Mar, 14:28",
+      "dueDate": "2026-03-17",
+      "icon": "slideshow",
+      "filePath": "/uploads/1773757728312-lecture-5-Evaluation-Techniques-1.pptx"
+    },
     {
       "id": "918572ed-1191-4250-ab1a-90d8e348d330",
       "title": "Computer Networks Week 8",
