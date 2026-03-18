@@ -23,9 +23,9 @@
   ],
   "sessions": [
     {
-      "token": "5bd6472d0cf83e910c14731a8a210405e1932d04510059b7",
+      "token": "c41638239b380cf925f62c0776e6fc25cb50861dcb78a10c",
       "userId": "0005678",
-      "createdAt": "2026-03-17T22:53:31.080Z"
+      "createdAt": "2026-03-16T23:46:08.764Z"
     }
   ],
   "attendance": [
@@ -66,11 +66,6 @@
     }
   ],
   "announcements": [
-    {
-      "title": "CS849: new slides uploaded",
-      "time": "Just now",
-      "color": "#3d5af1"
-    },
     {
       "title": "CS849: new slides uploaded",
       "time": "Just now",
@@ -434,20 +429,6 @@
   ],
   "resources": [
     {
-      "id": "740b279b-8b77-47a4-b98c-34ddf4ea8b74",
-      "title": "Human Computer Interaction",
-      "type": "Slides",
-      "course": "CS849",
-      "lecturer": "Dr. Gaddafi",
-      "description": "Evaluation techniques",
-      "fileName": "lecture 5 Evaluation Techniques-1.pptx",
-      "size": "3.3 MB",
-      "uploaded": "17 Mar, 14:28",
-      "dueDate": "2026-03-17",
-      "icon": "slideshow",
-      "filePath": "/uploads/1773757728312-lecture-5-Evaluation-Techniques-1.pptx"
-    },
-    {
       "id": "918572ed-1191-4250-ab1a-90d8e348d330",
       "title": "Computer Networks Week 8",
       "type": "Slides",
@@ -534,25 +515,11 @@
       "createdAt": "2026-03-10T15:24:04.382Z"
     },
     {
-      "id": "53d32fd9-6d52-43aa-b146-7ebadc83efb4",
+      "id": "930f9bbf-ed70-498f-b83d-a8dab795f5df",
       "studentId": "0005678",
-      "lecturerId": "LEC002",
-      "lecturerName": "Dr. Peasah",
-      "createdAt": "2026-03-17T14:43:37.038Z"
-    },
-    {
-      "id": "0e977e71-c208-4267-a3ad-ca9d4252c7da",
-      "studentId": "0005678",
-      "lecturerId": "LEC001",
-      "lecturerName": "Dr. Gaddafi",
-      "createdAt": "2026-03-17T15:05:32.967Z"
-    },
-    {
-      "id": "a4d95762-8127-4c8d-83a4-c1dbc2e41dd6",
-      "studentId": "0005678",
-      "lecturerId": "LEC006",
-      "lecturerName": "Prof. James Otieno",
-      "createdAt": "2026-03-17T22:53:54.948Z"
+      "lecturerId": "LEC007",
+      "lecturerName": "Dr. Efua Asare",
+      "createdAt": "2026-03-14T18:18:01.665Z"
     }
   ]
 }
